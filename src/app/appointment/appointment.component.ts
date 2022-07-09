@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder,  Validator, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { DataService } from '../service/data.service'; 
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-appointment',
@@ -13,20 +12,44 @@ export class AppointmentComponent implements OnInit {
   isFormValid: boolean = true;
   isAppointmentFound: boolean = false;
 
-  constructor( private fb: FormBuilder, private dataService: DataService, private router: Router ) { 
+  constructor( private fb: FormBuilder, private dataService: DataService ) { 
     this.appointmentForm = this.fb.group({ 
-      firstName: [
-        '',
-        [Validators.required, Validators.pattern('^[a-zA-Z]*$')],
-      ],
-      lastname: ['', [Validators.required, Validators.pattern('^[a-zA-Z]*$')]],
-      dob: ['', [Validators.required]],
-
+      firstName: [ '', [Validators.required, Validators.pattern('^[a-zA-Z]*$')] ],
+      lastname: [ '', [Validators.required, Validators.pattern('^[a-zA-Z]*$')] ],
+      dob: [ '', [Validators.required] ]
     })
   }
 
+  get dob(){
+    return this.appointmentForm.get('dob');
+  }
 
+  get firstname() {
+    return this.appointmentForm.get('firstname');
+  }
+
+  get lastname() {
+    return this.appointmentForm.get('lastname');
+  }
 
   ngOnInit(): void {}
+
+  onSubmit() {
+    this.isAppointmentFound = false;
+    this.verifyFormValidity();
+    let findAppointment;
+    if(!this.isFormValid) return;
+    if(this.isFormValid){
+      findAppointment = this.dataService.mockData.find(
+        apt => 
+           apt.firstName.toLowerCase() === this.firstname.value.toLowerCase() && 
+           apt.lastName.toLowerCase() === this.lastname.value.toLowerCase()
+      );
+    }
+  }
+
+  verifyFormValidity() {
+    return ( this.isFormValid = this.dob.valid && this.firstname.valid && this.lastname.valid );
+  }
 
 }
