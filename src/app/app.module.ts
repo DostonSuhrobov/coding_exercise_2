@@ -8,11 +8,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppointmentComponent } from './appointment/appointment.component';
+import { CheckinComponent } from './checkin/checkin.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AppointmentComponent
+    AppointmentComponent,
+    CheckinComponent
   ],
   imports: [
     BrowserModule,
